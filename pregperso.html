@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Conductores</title>
+    <style>
+        body {
+            background: linear-gradient(45deg, #4b0082, #8a2be2, #ffcc00);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            animation: fadeIn 1.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        h1 {
+            text-shadow: 3px 3px 15px yellow;
+            font-size: 3rem;
+            margin-top: 30px;
+            animation: bounce 1s ease infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px yellow;
+        }
+        .question {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px;
+            background: rgba(255, 255, 0, 0.9);
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 15px;
+            box-shadow: 0px 0px 8px yellow;
+            transition: 0.3s;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .options button:hover {
+            background: yellow;
+            transform: scale(1.1);
+        }
+        .result {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .buttons button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            box-shadow: 0px 0px 15px yellow;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            background: violet;
+            color: black;
+        }
+        .buttons button:hover {
+            background: #9400d3;
+            color: white;
+        }
+        .bottom-button {
+            background: violet;
+            box-shadow: 0px 0px 20px violet;
+            font-weight: bold;
+            transition: 0.3s;
+            color: black;
+            padding: 15px 40px;
+            font-size: 20px;
+            border-radius: 30px;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: none;
+        }
+        .bottom-button:hover {
+            background: #9400d3;
+            color: white;
+            box-shadow: 0px 0px 30px violet;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Trivia Conductores</h1>
+    <div class="container">
+        <p class="question" id="question"></p>
+        <div class="options" id="options"></div>
+        <p class="result" id="result"></p>
+        <div class="buttons">
+            <button id="retry" class="hidden" onclick="reiniciarJuego()">Volver a jugar</button>
+        </div>
+    </div>
+    <button class="bottom-button" onclick="location.href='index.html'">Volver al inicio</button>
+
+    <script>
+        const preguntas = [
+        { pregunta: "¿En qué año ganaron Nico y Flor el Bailando por un Sueño?", opciones: ["2018", "2019", "2017"], correcta: "2019" },
+            { pregunta: "¿Cómo se llamaba el personaje de Santi en Patito Feo?", opciones: ["Lucas", "Guido", "Brian"], correcta: "Guido" },
+            { pregunta: "¿De que signo es Momi Giardina?", opciones: ["Virgo", "Leo", "Aries"], correcta: "Aries" },
+            { pregunta: "¿En que año nació Flor?", opciones: ["1994", "1995", "1996"], correcta: "1994" },
+            { pregunta: "¿En que serie actuó Martin?", opciones: ["Casi Angeles", "La casa de papel", "Division palermo"], correcta: "Division palermo" },
+        
+            { pregunta: "¿Como se llama el podcast producido por Santi?", opciones: ["Cero miligramos", "100 pastillas", "Una pasti mas"], correcta: "Cero miligramos" },
+            { pregunta: "¿En que programa de TV participó Nico?", opciones: ["Gran Hermano", "Implacables", "Tenemos Wifi"], correcta: "Tenemos Wifi" },
+            { pregunta: "¿Que premio gano Momi en el 2023?", opciones: ["Martin Fierro", "Estrella de mar", "Premios Carlos"], correcta: "Estrella de mar" },
+            { pregunta: "¿En que otro programa de Luzu esta Martin?", opciones: ["Xstream master", "Algo va a picar", "Edicion especial"], correcta: "Edicion especial" },
+            { pregunta: "¿Que es lo que mas le interesa a Flor?", opciones: ["Astrologia", "Ser cantante", "Arquitectura"], correcta: "Astrologia" },
+        
+            { pregunta: "¿De quien esta profundamente enamorado Martin?", opciones: ["La pichi", "La pichi", "La pichi"], correcta: "La pichi" },
+            { pregunta: "¿De que estaba disfrazada Flor cuando la vio Nico en el programa de Guido?", opciones: ["Monja", "Personaje de la casa de papel", "Bruja"], correcta: "Personaje de la casa de papel" },
+            { pregunta: "¿En que serie participó Santi?", opciones: ["Porno y helado", "Margarita", "Envidiosa"], correcta: "Porno y helado" },
+            { pregunta: "¿De que club es hincha Nico?", opciones: ["River", "Independiente", "Otro"], correcta: "Otro" },
+            { pregunta: "¿Cómo se llama su unipersonal de stand-up?", opciones: ["Recalculando", "Cualquier Cosa te Llamamos", "Ya quisieras"], correcta: "Cualquier Cosa te Llamamos" }
+
+        ]; // Preguntas y respuestas aquí
+        
+        let indice = 0;
+        let correctas = 0;
+        
+        function mostrarPregunta() {
+            if (indice < preguntas.length) {
+                document.getElementById("question").innerText = preguntas[indice].pregunta;
+                document.getElementById("options").innerHTML = preguntas[indice].opciones.map(opcion => 
+                    `<button onclick="verificar('${opcion}')">${opcion}</button>`
+                ).join("");
+            } else {
+                document.getElementById("question").innerText = "Trivia finalizada. Respuestas correctas: " + correctas + "/15";
+                document.getElementById("options").innerHTML = '';
+                document.getElementById("retry").classList.remove("hidden");
+            }
+        }
+        
+        function verificar(respuesta) {
+            if (respuesta === preguntas[indice].correcta) correctas++;
+            indice++;
+            mostrarPregunta();
+        }
+        
+        function reiniciarJuego() {
+            indice = 0;
+            correctas = 0;
+            document.getElementById("retry").classList.add("hidden");
+            mostrarPregunta();
+        }
+        
+        mostrarPregunta();
+    </script>
+</body>
+</html>

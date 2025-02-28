@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luzu TV Horarios</title>
+    <style>
+        body {
+            background-color: #1c1c1c;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .program {
+            background-color: #4a4a4a;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .program img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        .logo {
+            width: 50px;
+            margin-bottom: 10px;
+            transition: transform 0.3s ease;
+        }
+        .expanded {
+            transform: scale(2);
+        }
+        .button {
+            background-color: #ffcc00;
+            color: black;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+    </style>
+    <script>
+        function expandLogo(text) {
+            const logo = document.getElementById('logo');
+            const info = document.getElementById('info');
+            logo.classList.add('expanded');
+            info.innerText = text;
+            setTimeout(() => {
+                logo.classList.remove('expanded');
+                info.innerText = '';
+            }, 10000);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <img src="luzu.png" alt="Luzu TV" class="logo" id="logo">
+        <p id="info"></p>
+        <div class="program" onclick="expandLogo('FM LUZU: CON CRIS VANADIA')"><img src="prog/fm.png" alt="FM LUZU"> FM LUZU - LU A VI 07HS</div>
+        <div class="program" onclick="expandLogo('ANTES QUE NADIE: CON DIEGO LEUCO, MICA VAZQUEZ, EL TRINCHE Y YOYI FRANCELLA')"><img src="prog/aqn.png" alt="Antes Que Nadie"> ANTES QUE NADIE - LU A VI 08HS</div>
+        <div class="program" onclick="expandLogo('NADIE DICE NADA: CON NICO OCCHIATO, FLOR JAZMIN PEÑA, MARTIN GARABAL, MOMI GIARDINA Y SANTI TALLEDO')"><img src="prog/ndn.png" alt="Nadie Dice Nada"> NADIE DICE NADA - LU A VI 10HS</div>
+        <div class="program" onclick="expandLogo('PATRIA Y FAMILIA: CON FEDE POPGOLD, CAMI MAYAN, JULI CASTRO, LUCAS SPADAFORA, ANITA ESPOSITO Y LOS LUNES, DANIELA CELIS')"><img src="prog/pyf.png" alt="Patria y Familia"> PATRIA Y FAMILIA - LU A VI 12:30HS</div>
+        <div class="program" onclick="expandLogo('SE FUE LARGA: CON FERBO, DOMI FAENA, BELU NEGRI, LUCAS LEZIN Y SOFI CALVO')"><img src="prog/sfl.png" alt="Se Fue Larga"> SE FUE LARGA - LU A VI 14:30HS</div>
+        <div class="program" onclick="expandLogo('LA NOVELA: CON CARI ZAMPINI, DIEGO CASTRO, AGUS BATTIONI Y GABY SCHULZ')"><img src="prog/lanov.png" alt="La Novela"> LA NOVELA - LU MI Y VI 16:30HS</div>
+        <div class="program" onclick="expandLogo('ALGO VA A PICAR: CON LA TORA, MARQUITOS GILES Y VICKY GARABAL')"><img src="prog/pica.png" alt="Algo Va a Picar"> ALGO VA A PICAR - MA Y JU 16:30HS</div>
+        <div class="program" onclick="expandLogo('ALGO DE MÚSICA: CON KARINA ')"><img src="prog/musica.png" alt="Algo de Música"> ALGO DE MÚSICA - ON DEMAND</div>
+        <div class="program" onclick="expandLogo('XTREAM MASTER: CON PACHU PEÑA, NAZARENO MOTTOLA, PICHU STRANEO, JAVI FERNANDEZ Y MARCELO RUIZ DIAZ')"><img src="prog/master.png" alt="Xtream Master"> XTREAM MASTER - ON DEMAND</div>
+        <div class="program" onclick="expandLogo('EDICIÓN ESPECIAL: CON MARTIN GARABAL, JULIANA GATTAS, LUCAS UPSTEIN, ALEXIS MOYANO, VICKY GARABAL Y MARTIN DOLINA')"><img src="prog/especial.png" alt="Edición Especial"> EDICIÓN ESPECIAL - ON DEMAND</div>
+        <a href="index.html" class="button">Volver al Inicio</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de reflejos</title>
+    <style>
+        body {
+            background: linear-gradient(to right, purple, yellow);
+            text-align: center;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        h1 {
+            text-shadow: 2px 2px 10px white;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px white;
+        }
+        .reaction-button {
+            background: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 20px;
+            box-shadow: 0px 0px 15px white;
+            transition: background 0.3s, color 0.3s;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .reaction-button.active {
+            background: red;
+            color: white;
+        }
+        .fixed-bottom {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(to right, yellow, purple);
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 30px;
+            box-shadow: 0px 0px 20px white;
+            transition: 0.3s;
+            border: none;
+        }
+        .fixed-bottom:hover {
+            background: white;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prueba de reflejos</h1>
+    <div class="container">
+        <p>Haz clic en el botón justo cuando cambie de color.</p>
+        <button id="reactionButton" class="reaction-button" onclick="checkReaction()">NADIE DICE NADA</button>
+        <p id="result"></p>
+    </div>
+    <button class="fixed-bottom" onclick="location.href='index.html'">Volver al inicio</button>
+
+    <script>
+        let button = document.getElementById("reactionButton");
+        let result = document.getElementById("result");
+        let startTime, endTime;
+
+        function startGame() {
+            result.innerText = "";
+            button.classList.remove("active");
+            button.disabled = true;
+            let randomTime = Math.random() * 3000 + 2000;
+            setTimeout(() => {
+                button.classList.add("active");
+                button.disabled = false;
+                startTime = new Date().getTime();
+            }, randomTime);
+        }
+
+        function checkReaction() {
+            if (button.classList.contains("active")) {
+                endTime = new Date().getTime();
+                let reactionTime = (endTime - startTime) / 1000;
+                result.innerHTML = `<span style="color: yellow; text-shadow: 0px 0px 10px yellow, 0px 0px 20px gold; font-size: 24px; font-weight: bold;">¡Tiempo de reacción: ${reactionTime.toFixed(2)} segundos!</span>`;
+                setTimeout(startGame, 1000);
+            }
+        }
+
+        startGame();
+    </script>
+</body>
+</html>

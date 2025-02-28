@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verdadero o Falso - NDN</title>
+    <style>
+        body {
+            background: linear-gradient(to right, purple, yellow);
+            text-align: center;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        h1 {
+            text-shadow: 2px 2px 10px white;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px white;
+        }
+        .question {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .buttons button {
+            background: linear-gradient(to right, white, pink);
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 20px;
+            box-shadow: 0px 0px 15px white;
+            transition: 0.3s;
+            font-weight: bold;
+            margin: 10px;
+        }
+        .buttons button:hover {
+            background: white;
+            color: black;
+        }
+        #resultado {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .fixed-bottom {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(to right, pink, silver);
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 30px;
+            box-shadow: 0px 0px 20px white;
+            transition: 0.3s;
+            border: none;
+        }
+        .fixed-bottom:hover {
+            background: white;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Verdadero o Falso - Invitados en NDN</h1>
+    <div class="container">
+        <p class="question" id="pregunta"></p>
+        <div class="buttons">
+            <button onclick="verificarRespuesta(true)">Verdadero</button>
+            <button onclick="verificarRespuesta(false)">Falso</button>
+        </div>
+        <p id="resultado"></p>
+    </div>
+    <button class="fixed-bottom" onclick="location.href='index.html'">Volver al inicio</button>
+
+    <script>
+        const invitados = {
+            "Lali": true, "Patricia Sosa": true, "Emilia": true, "Rosri De Paul": true,
+            "Leandro Paredes": true, "Oriana Sabatini": true, "Flor Vigna": true, "Juli Poggio": true,
+            "Marixa Balli": true, "Emanero": true, "Luquitas Rodríguez": true, "Yanina Latorre": true,
+            "Ángel de Brito": true, "Migue Granados": true, "Marley": true,
+            "Wanda Nara": false, "La China Suarez": false, "L-Gante": false, "Tinelli": false,
+            "Julián Álvarez": false, "Dybala": false, "Camilo": false, "Martin Campi": false,
+            "Guido Kaczka": false, "Guillermo Francella": false, "Valentina Zenere": false, "Pampita": false
+        };
+
+        let nombres = Object.keys(invitados);
+        let nombreActual;
+
+        function nuevaPregunta() {
+            nombreActual = nombres[Math.floor(Math.random() * nombres.length)];
+            document.getElementById("pregunta").innerText = `¿${nombreActual} estuvo en NDN?`;
+            document.getElementById("resultado").innerText = "";
+        }
+
+        function verificarRespuesta(respuesta) {
+            if (respuesta === invitados[nombreActual]) {
+                document.getElementById("resultado").innerHTML = `<span style="color: yellow; text-shadow: 0px 0px 10px yellow, 0px 0px 20px gold; font-size: 28px; font-weight: bold;">¡Correcto!</span>`;
+            } else {
+                document.getElementById("resultado").innerHTML = `<span style="color: red; text-shadow: 0px 0px 10px red, 0px 0px 20px darkred; font-size: 28px; font-weight: bold;">Incorrecto</span>`;
+            }
+            setTimeout(nuevaPregunta, 2000);
+        }
+
+        nuevaPregunta();
+    </script>
+</body>
+</html>

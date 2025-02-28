@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ta Te Ti - PyF</title>
+    <style>
+        body {
+            background: linear-gradient(45deg, #4b0082, #8a2be2, #ffcc00);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            animation: fadeIn 1.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        h1 {
+            text-shadow: 3px 3px 15px yellow;
+            font-size: 3rem;
+            margin-top: 30px;
+            animation: bounce 1s ease infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px yellow;
+        }
+        .selection button, .reset-button {
+            background: rgba(255, 255, 0, 0.9);
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 20px;
+            box-shadow: 0px 0px 15px yellow;
+            transition: 0.3s;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .selection button:hover, .reset-button:hover {
+            background: yellow;
+            color: black;
+            transform: scale(1.1);
+            box-shadow: 0px 0px 30px yellow;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .cell img {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+        }
+        #turno {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ta Te Ti - PyF</h1>
+    <div class="container">
+        <p>Selecciona el enfrentamiento:</p>
+        <div class="selection">
+            <button onclick="iniciarJuego('momi', 'flor')">momi vs flor</button>
+            <button onclick="iniciarJuego('nico', 'santi')">nico vs santi</button>
+            <button onclick="iniciarJuego('martin', 'momi')">martin vs momi</button>
+            <button onclick="iniciarJuego('flor', 'nico')">flor vs nico</button>
+            <button onclick="iniciarJuego('santi', 'martin')">santi vs martin</button>
+            <button onclick="iniciarJuego('martin', 'nico')">martin vs nico</button>
+            <button onclick="iniciarJuego('momi', 'santi')">momi vs santi</button>
+            <button onclick="iniciarJuego('flor', 'martin')">flor vs martin</button>
+            <button onclick="iniciarJuego('nico', 'momi')">nico vs momi</button>
+            <button onclick="iniciarJuego('santi', 'flor')">santi vs flor</button>
+        </div>
+        <p id="turno"></p>
+        <div class="grid" id="grid"></div>
+        <p id="resultado"></p>
+        <button class="reset-button" onclick="reiniciarJuego()">Volver a jugar</button>
+    </div>
+    <button class="fixed-bottom" onclick="location.href='index.html'">Volver al inicio</button>
+
+<script>
+    let turno, jugador1, jugador2;
+    const imagenes = {
+        'momi': 'momi.jpg',
+        'flor': 'flor.png',
+        'nico': 'nico.png',
+        'santi': 'santi.png',
+        'martin': 'martin.png'
+    };
+
+    function iniciarJuego(j1, j2) {
+        jugador1 = j1;
+        jugador2 = j2;
+        turno = jugador1;
+        document.getElementById("resultado").innerText = "";
+        document.getElementById("turno").innerText = `Turno de: ${turno}`;
+        crearTablero();
+    }
+
+    function crearTablero() {
+        let grid = document.getElementById("grid");
+        grid.innerHTML = "";
+        for (let i = 0; i < 9; i++) {
+            let cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.dataset.index = i;
+            cell.onclick = jugar;
+            grid.appendChild(cell);
+        }
+    }
+
+    function jugar() {
+        if (this.innerHTML !== "") return;
+        this.innerHTML = `<img src="${imagenes[turno]}" alt="${turno}">`;
+        this.dataset.jugador = turno;
+        verificarGanador();
+        turno = turno === jugador1 ? jugador2 : jugador1;
+        document.getElementById("turno").innerText = `Turno de: ${turno}`;
+    }
+
+    function verificarGanador() {
+        const celdas = document.querySelectorAll(".cell");
+        const combinaciones = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+        for (let comb of combinaciones) {
+            const [a, b, c] = comb;
+            if (
+                celdas[a].dataset.jugador &&
+                celdas[a].dataset.jugador === celdas[b].dataset.jugador &&
+                celdas[a].dataset.jugador === celdas[c].dataset.jugador
+            ) {
+                document.getElementById("resultado").innerHTML = `<span style="color: yellow; text-shadow: 0px 0px 10px yellow, 0px 0px 20px gold; font-size: 36px; font-weight: bold;">¡${celdas[a].dataset.jugador} gana!</span>`;
+                deshabilitarCeldas();
+                return;
+            }
+        }
+    }
+
+    function deshabilitarCeldas() {
+        document.querySelectorAll(".cell").forEach(cell => cell.onclick = null);
+    }
+
+    function reiniciarJuego() {
+        iniciarJuego(jugador1, jugador2);
+    }
+</script>
+
+</body> 
+</html>

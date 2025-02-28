@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿De que signo sos?</title>
+    <style>
+        body {
+            background: linear-gradient(45deg, #4b0082, #8a2be2, #ffcc00);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            animation: fadeIn 1.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        h1 {
+            text-shadow: 3px 3px 15px yellow;
+            font-size: 3rem;
+            margin-top: 30px;
+            animation: bounce 1s ease infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            padding: 20px;
+        }
+        .question-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px white;
+            max-width: 600px;
+            text-align: center;
+        }
+        button {
+            background: rgba(255, 255, 0, 0.9);
+            border: none;
+            padding: 15px 25px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px yellow;
+            transition: 0.3s ease-in-out;
+            margin: 5px;
+        }
+        button:hover {
+            background: yellow;
+            color: black;
+            transform: scale(1.1);
+            box-shadow: 0px 0px 30px yellow;
+        }
+        .fixed-bottom {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <h1>¿De que signo sos?</h1>
+    <div class="container">
+        <div class="question-box">
+            <p class="question" id="pregunta"></p>
+            <div class="options" id="opciones"></div>
+        </div>
+        <h2 id="resultado"></h2>
+        <div class="bottom" id="finalButtons" style="display: none;">
+            <button onclick="reiniciarJuego()">Volver a jugar</button>
+        </div>
+    </div>
+    <button class="fixed-bottom" onclick="location.href='index.html'">Volver al inicio</button>
+    <script>
+        const preguntas = [
+            { pregunta: "¿Cómo reaccionás ante un problema?", opciones: { aries: "Con impulso y acción", tauro: "Con calma y paciencia", geminis: "Buscando diferentes soluciones", cancer: "De manera emocional" } },
+            { pregunta: "¿Qué te motiva más en la vida?", opciones: { leo: "El reconocimiento", virgo: "La perfección", libra: "El equilibrio", escorpio: "La intensidad" } },
+            { pregunta: "¿Cómo enfrentás los cambios?", opciones: { sagitario: "Con emoción", capricornio: "Con planificación", acuario: "Con creatividad", piscis: "Con intuición" } },
+            { pregunta: "¿Cuál es tu elemento favorito?", opciones: { aries: "Fuego", tauro: "Tierra", geminis: "Aire", cancer: "Agua" } },
+            { pregunta: "¿Qué actividad te relaja más?", opciones: { leo: "Ser el centro de atención", virgo: "Ordenar", libra: "Socializar", escorpio: "Reflexionar" } },
+            { pregunta: "¿Cómo sos en una relación?", opciones: { sagitario: "Independiente", capricornio: "Comprometido", acuario: "Original", piscis: "Soñador" } },
+            { pregunta: "¿Cómo tomás las críticas?", opciones: { aries: "Me enojo rápido", tauro: "Las ignoro", geminis: "Las analizo", cancer: "Me afectan" } },
+            { pregunta: "¿Cómo te llevás con la rutina?", opciones: { leo: "Necesito emoción", virgo: "Me da seguridad", libra: "Busco equilibrio", escorpio: "La adapto a mi manera" } },
+            { pregunta: "¿Qué valorás más en la vida?", opciones: { sagitario: "La libertad", capricornio: "El éxito", acuario: "La autenticidad", piscis: "La sensibilidad" } },
+            { pregunta: "¿Cómo resolvés problemas?", opciones: { aries: "Con rapidez", tauro: "Con paciencia", geminis: "Con ingenio", cancer: "Con el corazón" } }
+        ];
+        
+        let conteo = { aries: 0, tauro: 0, geminis: 0, cancer: 0, leo: 0, virgo: 0, libra: 0, escorpio: 0, sagitario: 0, capricornio: 0, acuario: 0, piscis: 0 };
+        let indicePregunta = 0;
+        
+        function mostrarPregunta() {
+            if (indicePregunta < preguntas.length) {
+                document.getElementById("pregunta").innerText = preguntas[indicePregunta].pregunta;
+                const opcionesDiv = document.getElementById("opciones");
+                opcionesDiv.innerHTML = "";
+                
+                for (let key in preguntas[indicePregunta].opciones) {
+                    let boton = document.createElement("button");
+                    boton.innerText = preguntas[indicePregunta].opciones[key];
+                    boton.onclick = function() { 
+                        conteo[key]++;
+                        indicePregunta++;
+                        mostrarPregunta();
+                    };
+                    opcionesDiv.appendChild(boton);
+                }
+            } else {
+                mostrarResultado();
+            }
+        }
+        
+        function mostrarResultado() {
+            let resultado = Object.keys(conteo).reduce((a, b) => conteo[a] > conteo[b] ? a : b);
+            document.getElementById("pregunta").innerText = "Tu signo zodiacal es:";
+            document.getElementById("opciones").innerHTML = `<h2>${resultado.toUpperCase()}</h2>`;
+            document.getElementById("finalButtons").style.display = "flex";
+        }
+        
+        function reiniciarJuego() {
+            location.reload();
+        }
+        
+        mostrarPregunta();
+    </script>
+</body>
+</html>

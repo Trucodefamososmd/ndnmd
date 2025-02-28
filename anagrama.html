@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anagrama - Patria y Familia</title>
+    <style>
+        body {
+            background: linear-gradient(45deg, #4b0082, #8a2be2, #ffcc00);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            animation: fadeIn 1.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        h1 {
+            text-shadow: 3px 3px 15px yellow;
+            font-size: 3rem;
+            margin-top: 30px;
+            animation: bounce 1s ease infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px white;
+        }
+        .word {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .button {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            background: rgba(255, 255, 0, 0.9);
+            box-shadow: 0px 0px 20px yellow;
+        }
+        .button:hover {
+            background: yellow;
+            color: black;
+            transform: scale(1.1);
+            box-shadow: 0px 0px 30px yellow;
+        }
+        input {
+            font-size: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            text-align: center;
+        }
+        #siguiente {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Anagrama - Patria y Familia</h1>
+    <div class="container">
+        <p id="palabra" class="word"></p>
+        <input type="text" id="respuesta" placeholder="Escribe la palabra correcta">
+        <button class="button" onclick="verificarRespuesta()">Verificar</button>
+        <p id="resultado"></p>
+        <button class="button" id="siguiente" onclick="nuevaPalabra()">Siguiente</button>
+        <button class="button" onclick="location.href='index.html'">Volver al inicio</button>
+    </div>
+    
+    <script>
+        const palabras = [
+            "glotona", "santi talledo", "martin garabal", "pulpo", "santi talledo", 
+            "marianela", "flor jazmin peña", "nico occhiato", "momi giardina", "pichi", "nonna y nonno", "nadie dice nada", "occhiamin", "quiero mi tupper", "me parecen muy estupidos", "aca estamos para darte", "ponemos un temon de juan dinatale", "me enamore como no pense que me iba a enamorar en mi vida", "5 puntos arriba del programa de ayer"
+        ];
+        let palabraActual = "";
+
+        function nuevaPalabra() {
+            palabraActual = palabras[Math.floor(Math.random() * palabras.length)];
+            let desordenada = palabraActual.split('').sort(() => Math.random() - 0.5).join('');
+            document.getElementById("palabra").textContent = desordenada;
+            document.getElementById("respuesta").value = "";
+            document.getElementById("resultado").textContent = "";
+            document.getElementById("siguiente").style.display = "none";
+        }
+
+        function verificarRespuesta() {
+            let respuestaUsuario = document.getElementById("respuesta").value.toLowerCase().trim();
+            if (respuestaUsuario === palabraActual.toLowerCase()) {
+                document.getElementById("resultado").textContent = "¡Correcto!";
+                document.getElementById("siguiente").style.display = "inline-block";
+            } else {
+                document.getElementById("resultado").textContent = "Intenta de nuevo.";
+            }
+        }
+
+        nuevaPalabra();
+    </script>
+</body>
+</html>

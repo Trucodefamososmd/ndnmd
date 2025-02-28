@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verdadero o Falso - Patria y Familia</title>
+    <style>
+        body {
+            background: linear-gradient(45deg, #4b0082, #8a2be2, #ffcc00);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            animation: fadeIn 1.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        h1 {
+            text-shadow: 3px 3px 15px yellow;
+            font-size: 3rem;
+            margin-top: 30px;
+            animation: bounce 1s ease infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px white;
+        }
+        .button {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0px 0px 20px yellow;
+        }
+        .button.true {
+            background: green;
+            color: white;
+        }
+        .button.false {
+            background: red;
+            color: white;
+        }
+        .button:hover {
+            opacity: 0.8;
+        }
+        .fixed-bottom {
+            background: violet;
+            box-shadow: 0px 0px 20px violet;
+            font-weight: bold;
+            transition: 0.3s;
+            color: black;
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+        }
+        .fixed-bottom:hover {
+            background: #9400d3;
+            color: white;
+            box-shadow: 0px 0px 30px violet;
+        }
+    </style>
+</head>
+<body>
+    <h1>Verdadero o Falso - Patria y Familia</h1>
+    <div class="container">
+        <p id="pregunta"></p>
+        <button class="button true" id="verdadero" onclick="responder(true)">Verdadero</button>
+        <button class="button false" id="falso" onclick="responder(false)">Falso</button>
+        <p id="resultado"></p>
+        <button class="button" id="reiniciar" onclick="iniciarJuego()" style="display:none;">Volver a jugar</button>
+    </div>
+    <button class="fixed-bottom" onclick="location.href='index.html'">Volver al inicio</button>
+    <script>
+        const preguntas = [
+        { texto: "<span class='bold-text'>El programa varias veces fue grabado y no en vivo.</span>", respuesta: false },
+        { texto: "<span class='bold-text'>Flor Jazmín empezó en el programa como productora.</span>", respuesta: false },
+        { texto: "<span class='bold-text'>Con el paso de los años, NDN ya se transmitio en 4 o mas estudios</span>", respuesta: true },
+        { texto: "<span class='bold-text'>Los viernes en el programa hay un resumen semanal</span>", respuesta: false },
+
+        { texto: "<span class='bold-text'>Hubo una seccion del programa que se llamaba Momi Tv</span>", respuesta: true },
+        { texto: "<span class='bold-text'>El programa se llama asi, porque la idea del nombre es el no naturalizar cosas que pasan en la diaria</span>", respuesta: true },
+        { texto: "<span class='bold-text'>El programa solo se transmite por Youtube</span>", respuesta: false },
+        { texto: "<span class='bold-text'>Nico Occhiato y Nati J estuvieron en pareja.</span>", respuesta: false },
+
+        { texto: "<span class='bold-text'>Ya hicieron mas de 10 shows en distintas partes del mundo</span>", respuesta: true },
+        { texto: "<span class='bold-text'>NDN hizo un especial en QATAR</span>", respuesta: true },
+        { texto: "<span class='bold-text'>Santi una vez se enojó con Momi y abandonó el programa en vivo.</span>", respuesta: false },
+        { texto: "<span class='bold-text'>Hay una sección fija donde Flor lee horóscopos.</span>", respuesta: false },
+        
+        { texto: "<span class='bold-text'>El equipo viajó a Miami para hacer una edición especial desde la playa.</span>", respuesta: false },
+        { texto: "<span class='bold-text'>Tini fue una de las primeras invitadas de NDN</span>", respuesta: false },
+        { texto: "<span class='bold-text'>Cuando Lali estuvo de invitada, canto el hit de Momi</span>", respuesta: true },
+        { texto: "<span class='bold-text'>El primer programa fue el 2/11/20</span>", respuesta: true },
+
+        { texto: "<span class='bold-text'>Santi fue el ultimo en integrarse al equipo</span>", respuesta: true },
+        { texto: "<span class='bold-text'>El pulpo es el unico que esta en la produccion desde que arrano el programa</span>", respuesta: true },
+        { texto: "<span class='bold-text'>Hicieron un programa desde un estadio de futbol en España</span>", respuesta: true },
+            { texto: "<span class='bold-text'>NDN siempre tuvo la misma apertura musical</span>", respuesta: true }
+        ];
+        
+        let preguntasRestantes = [];
+        let puntaje = 0;
+
+        function iniciarJuego() {
+            preguntasRestantes = [...preguntas].sort(() => Math.random() - 0.5);
+            puntaje = 0;
+            document.getElementById("verdadero").style.display = "inline-block";
+            document.getElementById("falso").style.display = "inline-block";
+            document.getElementById("reiniciar").style.display = "none";
+            document.getElementById("resultado").innerText = "";
+            siguientePregunta();
+        }
+
+        function siguientePregunta() {
+            if (preguntasRestantes.length === 0) {
+                document.getElementById("pregunta").innerText = `Juego terminado. Respuestas correctas: ${puntaje}/${preguntas.length}`;
+                document.getElementById("verdadero").style.display = "none";
+                document.getElementById("falso").style.display = "none";
+                document.getElementById("reiniciar").style.display = "inline-block";
+                return;
+            }
+            let preguntaActual = preguntasRestantes.pop();
+            document.getElementById("pregunta").innerHTML = preguntaActual.texto;
+            document.getElementById("pregunta").setAttribute("data-respuesta", preguntaActual.respuesta);
+        }
+
+        function responder(respuestaUsuario) {
+            let respuestaCorrecta = document.getElementById("pregunta").getAttribute("data-respuesta") === "true";
+            if (respuestaUsuario === respuestaCorrecta) {
+                puntaje++;
+            }
+            siguientePregunta();
+        }
+
+        iniciarJuego();
+    </script>
+</body>
+</html>

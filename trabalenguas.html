@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruleta de trabalenguas</title>
+    <style>
+        body {
+            background: linear-gradient(45deg, #4b0082, #8a2be2, #ffcc00);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            animation: fadeIn 1.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px white, 0px 0px 30px yellow;
+
+        }
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                red 0deg 24deg,
+                yellow 24deg 48deg,
+                green 48deg 72deg,
+                blue 72deg 96deg,
+                orange 96deg 120deg,
+                purple 120deg 144deg,
+                cyan 144deg 168deg,
+                pink 168deg 192deg,
+                brown 192deg 216deg,
+                gray 216deg 240deg,
+                gold 240deg 264deg,
+                black 264deg 288deg,
+                white 288deg 312deg,
+                turquoise 312deg 336deg,
+                lime 336deg 360deg
+            );
+            position: absolute;
+            transition: transform 3s ease-out;
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+        }
+        .button {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .button:hover {
+            opacity: 0.8;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ruleta de trabalenguas</h1>
+    <div class="container">
+        <div class="wheel-container">
+            <div class="wheel" id="wheel"></div>
+            <div class="arrow">▼</div>
+        </div>
+        <button class="button" id="girarButton" onclick="girarRuleta()">Girar para ver que trabalenguas sale...</button>
+        <p id="reto" class="hidden"></p>
+    </div>
+    <button class="button" onclick="location.href='index.html'">Volver al inicio</button>
+
+    <script>
+        // Lista de retos organizados por color
+        const retosPorColor = {
+    "red": [
+        "🔥 Tres tristes tigres tragan trigo en un trigal.",
+        "💃 Pepe Pecas pica papas con un pico. Con un pico pica papas Pepe Pecas.",
+        "🎤 Pablito clavó un clavito, ¿qué clavito clavó Pablito?"
+    ],
+    "yellow": [
+        "😆 El perro de San Roque no tiene rabo porque Ramón Ramírez se lo ha cortado.",
+        "😂 Erre con erre guitarra, erre con erre barril, rápido ruedan las ruedas del ferrocarril.",
+        "🎭 Me han dicho que has dicho un dicho, ese dicho no lo he dicho, porque si lo hubiera dicho estaría bien dicho."
+    ],
+    "green": [
+        "🗣️ El cielo está enladrillado, ¿quién lo desenladrillará? El desenladrillador que lo desenladrille, buen desenladrillador será.",
+        "🤯 Si tu gusto gustara del gusto que gusta mi gusto, mi gusto gustaría del gusto que gusta tu gusto.",
+        "🐸 Cómo quieres que te quiera si el que quiero que me quiera no me quiere como quiero que me quiera."
+    ],
+    "blue": [
+        "💪 Un hipopótamo hipo tiene, ¿quién le quita el hipo al hipopótamo?",
+        "🕺 Un tigre, dos tigres, tres tigres tragan trigo en un trigal.",
+        "🏋️ Parra tenía una perra y Guerra tenía una parra. La perra de Parra rompió la parra de Guerra."
+    ],
+    "orange": [
+        "🎨 Compadre, cómpreme un coco. Compadre, no compro coco porque como poco coco, poco coco compro.",
+        "🤹‍♂️ Juan tuvo un tubo, pero el tubo que tuvo se le rompió.",
+        "📢 Si Pancha plancha con cuatro planchas, ¿con cuántas planchas plancha Pancha?"
+    ],
+    "purple": [
+        "🎤 El rey de Constantinopla está constantinoplizado. Constantinoplizándose está, el que lo constantinoplizare buen constantinoplizador será.",
+        "📢 Si la lombriz hace lombricitas, ¿qué lombricitas hace la lombriz?",
+        "🦸‍♂️ Cómo quieres que te quiera si el que quiero que me quiera no me quiere como quiero que me quiera."
+    ],
+    "cyan": [
+        "🌊 Si tu gusto gustara del gusto que gusta mi gusto, mi gusto gustaría del gusto que gusta tu gusto.",
+        "🏊‍♂️ Me han dicho que has dicho un dicho, ese dicho no lo he dicho, porque si lo hubiera dicho estaría bien dicho.",
+        "🐠 Erre con erre guitarra, erre con erre barril, rápido ruedan las ruedas del ferrocarril."
+    ],
+    "pink": [
+        "🎀 Parra tenía una perra y Guerra tenía una parra. La perra de Parra rompió la parra de Guerra.",
+        "📸 El cielo está enladrillado, ¿quién lo desenladrillará? El desenladrillador que lo desenladrille, buen desenladrillador será.",
+        "👛 Tres tristes tigres tragan trigo en un trigal."
+    ],
+    "brown": [
+        "🐻 Compadre, cómpreme un coco. Compadre, no compro coco porque como poco coco, poco coco compro.",
+        "🌰 Pepe Pecas pica papas con un pico. Con un pico pica papas Pepe Pecas.",
+        "🦁 Si la lombriz hace lombricitas, ¿qué lombricitas hace la lombriz?"
+    ],
+    "gray": [
+        "💼 Si Pancha plancha con cuatro planchas, ¿con cuántas planchas plancha Pancha?",
+        "📖 El perro de San Roque no tiene rabo porque Ramón Ramírez se lo ha cortado.",
+        "🧙‍♂️ Un hipopótamo hipo tiene, ¿quién le quita el hipo al hipopótamo?"
+    ],
+    "gold": [
+        "🏆 Me han dicho que has dicho un dicho, ese dicho no lo he dicho, porque si lo hubiera dicho estaría bien dicho.",
+        "🌟 Parra tenía una perra y Guerra tenía una parra. La perra de Parra rompió la parra de Guerra.",
+        "💎 Tres tristes tigres tragan trigo en un trigal."
+    ],
+    "black": [
+        "🎭 Si Pancha plancha con cuatro planchas, ¿con cuántas planchas plancha Pancha?",
+        "🖤 Cómo quieres que te quiera si el que quiero que me quiera no me quiere como quiero que me quiera.",
+        "👻 Un hipopótamo hipo tiene, ¿quién le quita el hipo al hipopótamo?"
+    ],
+    "white": [
+        "🕊️ Si la lombriz hace lombricitas, ¿qué lombricitas hace la lombriz?",
+        "✨ Me han dicho que has dicho un dicho, ese dicho no lo he dicho, porque si lo hubiera dicho estaría bien dicho.",
+        "❄️ El perro de San Roque no tiene rabo porque Ramón Ramírez se lo ha cortado."
+    ],
+    "turquoise": [
+        "🦜 Un tigre, dos tigres, tres tigres tragan trigo en un trigal.",
+        "🌊 Si tu gusto gustara del gusto que gusta mi gusto, mi gusto gustaría del gusto que gusta tu gusto.",
+        "🐳 Si Pancha plancha con cuatro planchas, ¿con cuántas planchas plancha Pancha?"
+    ],
+    "lime": [
+        "🍋 Pepe Pecas pica papas con un pico. Con un pico pica papas Pepe Pecas.",
+        "💚 Compadre, cómpreme un coco. Compadre, no compro coco porque como poco coco, poco coco compro.",
+        "🎶 El cielo está enladrillado, ¿quién lo desenladrillará? El desenladrillador que lo desenladrille, buen desenladrillador será."
+    ]
+}
+
+
+        let ultimoGiro = 0;
+
+        function girarRuleta() {
+            let giro = 3600 + Math.floor(Math.random() * 360);
+            ultimoGiro += giro;
+            document.getElementById("wheel").style.transform = `rotate(${ultimoGiro}deg)`;
+
+            setTimeout(() => {
+                let color = determinarColor(ultimoGiro % 360);
+                mostrarReto(color);
+            }, 3000);
+        }
+
+        function determinarColor(angulo) {
+            const colores = Object.keys(retosPorColor);
+            return colores[Math.floor(angulo / 24)];
+        }
+
+        function mostrarReto(color) {
+            let retos = retosPorColor[color];
+            let retoAleatorio = retos[Math.floor(Math.random() * retos.length)];
+            document.getElementById("reto").textContent = retoAleatorio;
+            document.getElementById("reto").classList.remove("hidden");
+        }
+    </script>
+
+</body>
+</html>

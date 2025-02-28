@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruleta de Retos</title>
+    <style>
+        body {
+            background: linear-gradient(45deg, #4b0082, #8a2be2, #ffcc00);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            animation: fadeIn 1.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px white, 0px 0px 30px yellow;
+
+        }
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                red 0deg 24deg,
+                yellow 24deg 48deg,
+                green 48deg 72deg,
+                blue 72deg 96deg,
+                orange 96deg 120deg,
+                purple 120deg 144deg,
+                cyan 144deg 168deg,
+                pink 168deg 192deg,
+                brown 192deg 216deg,
+                gray 216deg 240deg,
+                gold 240deg 264deg,
+                black 264deg 288deg,
+                white 288deg 312deg,
+                turquoise 312deg 336deg,
+                lime 336deg 360deg
+            );
+            position: absolute;
+            transition: transform 3s ease-out;
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+        }
+        .button {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .button:hover {
+            opacity: 0.8;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ruleta de Retos</h1>
+    <div class="container">
+        <div class="wheel-container">
+            <div class="wheel" id="wheel"></div>
+            <div class="arrow">▼</div>
+        </div>
+        <button class="button" id="girarButton" onclick="girarRuleta()">Girar para ver que reto sale...</button>
+        <p id="reto" class="hidden"></p>
+    </div>
+    <button class="button" onclick="location.href='index.html'">Volver al inicio</button>
+
+    <script>
+        // Lista de retos organizados por color
+        const retosPorColor = {
+            "red": ["🔥 Baila como loco por 30 segundos.", "💃 Haz una coreografía improvisada.", "🎤 Canta una canción con emoción."],
+            "yellow": ["😆 Imita Santi por 1 minuto.", "😂 Cuenta un chiste pésimo.", "🎭 Actúa como si fueras Nico Ochiatto."],
+            "green": ["🗣️ Habla en otro ingles por 5 minutos.", "🤯 Responde 3 preguntas echas por Santi.", "🐸 Habla como el pulpo por 30 segundos."],
+            "blue": ["💪 Haz 10 flexiones en vivo.", "🕺 Baila en cámara lenta.", "🏋️ Actúa como si levantaras 100kg."],
+            "orange": ["🎨 Dibuja algo en 30 segundos y el chat tiene que adivinar que es.", "🤹‍♂️ Intenta hacer malabares.", "📢 Grita una palabra que te diga Marianela."],
+            "purple": ["🎤 Canta sin miedo el coro de una canción.", "📢 Lee una frase al revés sin trabarte.", "🦸‍♂️ Actúa como si fueras el pulpo tocando la bateria."],
+            "cyan": ["🌊 Habla como momi (inclui caras).", "🏊‍♂️ Nada en el aire como si estuvieras en el agua.", "🐠 Habla como un pez por 20 segundos."],
+            "pink": ["🎀 Habla como si fueras un influencer.", "📸 Tómate una selfie haciendo una cara graciosa y subila al ig de NDN.", "👛 Recrea alguna escena de Occhiamin."],
+            "brown": ["🐻 Imita alguna escena de NDN.", "🌰 Canta La totona.", "🦁 Canta la cancion de NDN."],
+            "gray": ["💼 Actúa como Nico.", "📖 Lee una frase sin cambiar la cara.", "🧙‍♂️ Desafio de baile vs Flor."],
+            "gold": ["🏆 Haz un discurso de agradecimiento como si ganaras un Martin Fierro (y ochaitto estaba nominado en la misma terna).", "🌟 Camina como una celebridad en la alfombra roja.", "💎 Habla con la voz más elegante que puedas."],
+            "black": ["🎭 Actúa como un villano de película.", "🖤 Canta una cancion de Lali", "👻 Cuenta una historia de terror en 30 segundos."],
+            "white": ["🕊️ Explica algo como si fueras un ángel.", "✨ Haz un gesto mágico con las manos.", "❄️ Habla con la voz más suave que puedas."],
+            "turquoise": ["🦜 Habla como un loro repitiendo todo 2 veces.", "🌊 Describe la playa más hermosa que imaginas.", "🐳 Imita el sonido de una ballena."],
+            "lime": ["🍋 Haz una cara de extremo asombro por 10 segundos.", "💚 Explica por qué NDN es el mejor programa de luzu.", "🎶 Canta la primera canción que se te ocurra."]
+        };
+
+        let ultimoGiro = 0;
+
+        function girarRuleta() {
+            let giro = 3600 + Math.floor(Math.random() * 360);
+            ultimoGiro += giro;
+            document.getElementById("wheel").style.transform = `rotate(${ultimoGiro}deg)`;
+
+            setTimeout(() => {
+                let color = determinarColor(ultimoGiro % 360);
+                mostrarReto(color);
+            }, 3000);
+        }
+
+        function determinarColor(angulo) {
+            const colores = Object.keys(retosPorColor);
+            return colores[Math.floor(angulo / 24)];
+        }
+
+        function mostrarReto(color) {
+            let retos = retosPorColor[color];
+            let retoAleatorio = retos[Math.floor(Math.random() * retos.length)];
+            document.getElementById("reto").textContent = retoAleatorio;
+            document.getElementById("reto").classList.remove("hidden");
+        }
+    </script>
+
+</body>
+</html>
